@@ -6,6 +6,7 @@ The `ppca` packages implements different inference methods for Probabilistic Pri
 Python implementation followed the way from the book `A First Course in Machine Learning` by *Simon Rogers* and *Mark Girolami* from Chapter 7.5 to 7.7
 
 `ppca.py`: probabilistic PCA for continuous values (Simon's book Chapter 7.5)
+
 `probit_ppca.py`: probit ppca for binary values (Simon's book Chapter 7.7)
 
 Also, borrowed some code from:
