@@ -55,11 +55,11 @@ class PPCA:
         LB = self.a * np.log(self.b) + (self.a - 1) * self.e_log_tau - self.b * self.e_tau - special.gammaln(self.a)
         LB = LB - (self.e * np.log(self.f) + (self.e - 1) * self.e_log_tau - self.f * self.e_tau - special.gammaln(self.e))
         for n in range(N):
-            LB = LB + (-(D/2)*np.log(2*np.pi) - 0.5 * (np.trace(self.sigx) + self.e_X[n, :][np.newaxis].dot(self.e_X[n, :][np.newaxis].T)[0][0]))
-            LB = LB - (-(D/2)*np.log(2*np.pi) - 0.5 * np.log(np.linalg.det(self.sigx)) - 0.5 * D)
+            LB = LB + (-(D*0.5)*np.log(2*np.pi) - 0.5 * (np.trace(self.sigx) + self.e_X[n, :][np.newaxis].dot(self.e_X[n, :][np.newaxis].T)[0][0]))
+            LB = LB - (-(D*0.5)*np.log(2*np.pi) - 0.5 * np.log(np.linalg.det(self.sigx)) - 0.5 * D)
         for m in range(M):
-            LB = LB + (-(D/2)*np.log(2*np.pi) - 0.5 * (np.trace(self.sigw) + self.e_w[m, :][np.newaxis].dot(self.e_X[m, :][np.newaxis].T)[0][0]))
-            LB = LB - (-(D/2)*np.log(2*np.pi) - 0.5 * np.log(np.linalg.det(self.sigw)) - 0.5 * D)
+            LB = LB + (-(D*0.5)*np.log(2*np.pi) - 0.5 * (np.trace(self.sigw) + self.e_w[m, :][np.newaxis].dot(self.e_w[m, :][np.newaxis].T)[0][0]))
+            LB = LB - (-(D*0.5)*np.log(2*np.pi) - 0.5 * np.log(np.linalg.det(self.sigw)) - 0.5 * D)
         outer_expect = 0
         for n in range(N):
             for m in range(M):
