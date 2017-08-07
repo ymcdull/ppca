@@ -98,3 +98,5 @@ class PPCA:
                 if np.abs(self.lbs[it] - self.lbs[it - 1]) < self.tol:
                     break
 
+    def recover(self):
+        return self.e_X.dot(self.e_w.T)
