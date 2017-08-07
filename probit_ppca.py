@@ -28,12 +28,14 @@ class probitPPCA:
             self.e_XXt[:, :, n] = self.e_X[n, :].reshape(D, 1).dot(self.e_X[n, :].reshape(1, D))
             
         self.Q = np.zeros((N,M))
+        self.bias = np.zeros((N,M))
     
     def _update_Q(self):
-        xw = self.e_X.dot(self.e_w.T)
+        xw = self.e_X.dot(self.e_w.T) + self.bias
         ai = self.a - xw
         bi = self.b - xw
         self.Q = xw + (norm.pdf(ai) - norm.pdf(bi)) / (norm.cdf(bi) - norm.cdf(ai))
+
     def _update_W(self, M, D):
         for m in range(M):
             covw_m = np.linalg.inv(np.eye(D) + np.sum(self.e_XXt * np.tile(self.Z[:, m], (D, D, 1)), axis=2))
@@ -48,8 +50,12 @@ class probitPPCA:
             self.e_X[n, :] = covx_n.dot(np.sum(self.e_w.T * np.matlib.repmat(self.Z[n, :] * self.Q[n,:], D, 1), axis = 1).reshape(D, 1)).reshape(D)
             self.e_XXt[:, :, n] = covx_n + self.e_X[n,:].reshape(D,1).dot(self.e_X[n,:].reshape(1,D))
 
+    def _update_bias(self):
+        self.bias = 0.5 * (self.Q - self.e_X.dot(self.e_w.T))
+
     def _update(self, Y, N, M, D):
         self._update_Q()
+        self._update_bias()
         self._update_X(N, D)
         self._update_W(M, D)
         
@@ -67,3 +73,6 @@ class probitPPCA:
 
         for it in range(self.n_iters):
             self._update(Y, N, M, D)
+
+    def recover(self):
+        return norm.cdf(self.e_X.dot(self.e_w.T) + self.bias)
